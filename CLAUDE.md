@@ -47,18 +47,25 @@ hikearound-prototype/
 │   └── Hikearound.swift           # @main app entry point
 ├── Core/
 │   ├── Models/
-│   │   └── Hike.swift            # Core data models with sample data
+│   │   └── Hike.swift            # Core data models with sample data & formatting
 │   ├── Services/
 │   │   └── LocationManager.swift # CLLocationManager wrapper, ObservableObject
-│   └── Views/
-│       └── MainView.swift        # Root view container
+│   ├── Views/
+│   │   └── MainView.swift        # Root view container
+│   ├── Constants/
+│   │   └── DesignSystem.swift    # Centralized design constants and spacing
+│   └── Utilities/
+│       └── HikeSelectionAnimator.swift # Animation coordination helper
 ├── Features/
 │   ├── Map/
 │   │   ├── Views/
 │   │   │   └── HikeMapView.swift # Main map implementation with MapKit
 │   │   └── Components/
 │   │       ├── HikeMarkerView.swift  # Custom annotation views
-│   │       └── HikeDetailCard.swift  # Bottom sheet detail view
+│   │       ├── HikeDetailSheet.swift # Detail overlay component
+│   │       ├── HikeBottomSheetView.swift # Search and list view
+│   │       ├── MapFloatingToolbar.swift # Location/direction buttons
+│   │       └── StatView.swift       # Reusable stat display component
 │   └── Search/
 │       └── SearchBarView.swift   # Glass-morphic search bar
 ```

@@ -46,7 +46,10 @@ hikearound-prototype/
 │   │   │   └── HikeMapView.swift # Main map view
 │   │   └── Components/
 │   │       ├── HikeMarkerView.swift  # Custom map markers
-│   │       └── HikeDetailCard.swift  # Hike detail overlay
+│   │       ├── HikeDetailSheet.swift # Hike detail overlay
+│   │       ├── HikeBottomSheetView.swift # Search and list view
+│   │       ├── MapFloatingToolbar.swift # Map controls
+│   │       └── StatView.swift       # Statistics display
 │   └── Search/
 │       └── SearchBarView.swift   # Search interface
 └── Assets.xcassets/              # App assets and icons

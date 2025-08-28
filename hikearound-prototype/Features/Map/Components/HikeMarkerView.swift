@@ -32,10 +32,10 @@ struct HikeMarkerView: View {
 }
 
 #Preview {
-    VStack(spacing: 20) {
+    HStack(spacing: 40) {
         HikeMarkerView(hike: Hike.sampleHikes[0], isSelected: false)
-        HikeMarkerView(hike: Hike.sampleHikes[1], isSelected: true)
+        HikeMarkerView(hike: Hike.sampleHikes[0], isSelected: true)
     }
     .padding()
-    .background(Color.gray.opacity(0.2))
+    .background(Color(.systemGray6))
 }

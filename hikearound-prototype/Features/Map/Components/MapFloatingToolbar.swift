@@ -77,3 +77,17 @@ struct MapFloatingToolbar: View {
         }
     }
 }
+
+#Preview {
+    MapFloatingToolbar(
+        locationManager: LocationManager(),
+        isTrackingUserLocation: false,
+        toolbarOpacity: 1.0,
+        sheetHeight: 0,
+        safeAreaBottomInset: 0,
+        animation: .bouncy,
+        onLocationButtonTapped: {}
+    )
+    .padding()
+    .background(Color(.systemGray6))
+}
