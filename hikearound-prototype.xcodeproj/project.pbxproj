@@ -35,16 +35,6 @@
 			path = "hikearound-prototype";
 			sourceTree = "<group>";
 		};
-		E72FD2F82E60BAB300EBEFC7 /* hikearound-prototypeTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "hikearound-prototypeTests";
-			sourceTree = "<group>";
-		};
-		E72FD3022E60BAB300EBEFC7 /* hikearound-prototypeUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "hikearound-prototypeUITests";
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				E72FD2EA2E60BAAF00EBEFC7 /* hikearound-prototype */,
-				E72FD2F82E60BAB300EBEFC7 /* hikearound-prototypeTests */,
-				E72FD3022E60BAB300EBEFC7 /* hikearound-prototypeUITests */,
 				E72FD2E92E60BAAF00EBEFC7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -130,9 +118,6 @@
 			dependencies = (
 				E72FD2F72E60BAB300EBEFC7 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				E72FD2F82E60BAB300EBEFC7 /* hikearound-prototypeTests */,
-			);
 			name = "hikearound-prototypeTests";
 			packageProductDependencies = (
 			);
@@ -152,9 +137,6 @@
 			);
 			dependencies = (
 				E72FD3012E60BAB300EBEFC7 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				E72FD3022E60BAB300EBEFC7 /* hikearound-prototypeUITests */,
 			);
 			name = "hikearound-prototypeUITests";
 			packageProductDependencies = (
@@ -400,6 +382,7 @@
 				DEVELOPMENT_TEAM = 2DS67Q47ES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location to show nearby hikes and your position on the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -432,6 +415,7 @@
 				DEVELOPMENT_TEAM = 2DS67Q47ES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location to show nearby hikes and your position on the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
