@@ -20,11 +20,13 @@ struct HikeMapView: View {
     
     // Bottom Sheet Properties
     @State private var showBottomSheet: Bool = true
-    @State private var sheetDetent: PresentationDetent = .height(80)
+    @State private var sheetDetent: PresentationDetent = .height(DesignSystem.Sheet.collapsedHeight)
     @State private var sheetHeight: CGFloat = 0
     @State private var animationDuration: CGFloat = 0
     @State private var toolbarOpacity: CGFloat = 1
     @State private var safeAreaBottomInset: CGFloat = 0
+    @State private var isTrackingUserLocation: Bool = false
+    @State private var programmaticPositionChange: Bool = false
     
     // Sheet Content State
     enum SheetContent: Equatable {
@@ -41,35 +43,15 @@ struct HikeMapView: View {
             Annotation(hike.name, coordinate: hike.coordinate, anchor: .bottom) {
                 HikeMarkerView(hike: hike, isSelected: selectedHike?.id == hike.id)
                     .onTapGesture {
-                        selectedHike = hike
-                        
-                        // If sheet is collapsed, expand it first, then show hike detail
-                        if sheetDetent == .height(80) {
-                            withAnimation(.interpolatingSpring(duration: 0.3, bounce: 0.1)) {
-                                sheetDetent = .height(350)
-                            }
-                            // Delay hike detail animation until sheet expansion completes
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                withAnimation(.interpolatingSpring(duration: 0.4, bounce: 0.1)) {
-                                    sheetContent = .hikeDetail(hike)
-                                }
-                            }
-                        } else {
-                            // Sheet is already expanded, show hike detail immediately
-                            withAnimation(.interpolatingSpring(duration: 0.4, bounce: 0.1)) {
-                                sheetContent = .hikeDetail(hike)
-                            }
-                        }
-                        
-                        withAnimation(.bouncy) {
-                            position = .camera(
-                                MapCamera(
-                                    centerCoordinate: hike.coordinate,
-                                    distance: 5000,
-                                    pitch: 0
-                                )
-                            )
-                        }
+                        HikeSelectionAnimator.animateHikeSelection(
+                            hike: hike,
+                            currentSheetDetent: $sheetDetent,
+                            selectedHike: $selectedHike,
+                            sheetContent: $sheetContent,
+                            position: $position,
+                            isTrackingUserLocation: $isTrackingUserLocation,
+                            programmaticPositionChange: $programmaticPositionChange
+                        )
                     }
             }
             .tag(hike.id.uuidString)
@@ -82,8 +64,29 @@ struct HikeMapView: View {
         Map(position: $position, selection: $mapSelection, scope: mapScope) {
             mapContent
         }
-        .mapStyle(.standard(elevation: .realistic, emphasis: .automatic, pointsOfInterest: .excludingAll, showsTraffic: false))
+        .mapStyle(.standard(elevation: .realistic, emphasis: .automatic, pointsOfInterest: .excluding([.store, .restaurant, .gasStation, .hotel, .nightlife, .airport, .amusementPark, .aquarium, .atm, .bakery, .bank, .brewery, .cafe, .carRental, .evCharger, .fitnessCenter, .foodMarket, .laundry, .library, .marina, .movieTheater, .museum, .pharmacy, .postOffice, .school, .stadium, .store, .theater, .university, .winery, .zoo]), showsTraffic: false))
         .ignoresSafeArea(.container, edges: .top)
+        .overlay(alignment: .top) {
+            // Status bar blur for better readability
+            ZStack {
+                Rectangle()
+                    .fill(.ultraThinMaterial)
+                    .frame(height: DesignSystem.Map.statusBarBlurHeight)
+            }
+            .mask(
+                LinearGradient(
+                    colors: [
+                        Color.white,
+                        Color.white.opacity(0.8),
+                        Color.white.opacity(0.3),
+                        Color.clear
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .ignoresSafeArea(.container, edges: .top)
+        }
     }
     
     var body: some View {
@@ -96,35 +99,15 @@ struct HikeMapView: View {
                         searchText: $searchText,
                         hikes: hikes,
                         onHikeSelected: { hike in
-                            selectedHike = hike
-                            
-                            // If sheet is collapsed, expand it first, then show hike detail
-                            if sheetDetent == .height(80) {
-                                withAnimation(.interpolatingSpring(duration: 0.3, bounce: 0.1)) {
-                                    sheetDetent = .height(350)
-                                }
-                                // Delay hike detail animation until sheet expansion completes
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    withAnimation(.interpolatingSpring(duration: 0.4, bounce: 0.1)) {
-                                        sheetContent = .hikeDetail(hike)
-                                    }
-                                }
-                            } else {
-                                // Sheet is already expanded, show hike detail immediately
-                                withAnimation(.interpolatingSpring(duration: 0.4, bounce: 0.1)) {
-                                    sheetContent = .hikeDetail(hike)
-                                }
-                            }
-                            
-                            withAnimation(.bouncy) {
-                                position = .camera(
-                                    MapCamera(
-                                        centerCoordinate: hike.coordinate,
-                                        distance: 5000,
-                                        pitch: 0
-                                    )
-                                )
-                            }
+                            HikeSelectionAnimator.animateHikeSelection(
+                                hike: hike,
+                                currentSheetDetent: $sheetDetent,
+                                selectedHike: $selectedHike,
+                                sheetContent: $sheetContent,
+                                position: $position,
+                                isTrackingUserLocation: $isTrackingUserLocation,
+                                programmaticPositionChange: $programmaticPositionChange
+                            )
                         }
                     )
                     
@@ -169,9 +152,16 @@ struct HikeMapView: View {
                 .interactiveDismissDisabled()
             }
             .overlay(alignment: .bottomTrailing) {
-                floatingToolbar
+                MapFloatingToolbar(
+                    locationManager: locationManager,
+                    isTrackingUserLocation: isTrackingUserLocation,
+                    toolbarOpacity: toolbarOpacity,
+                    sheetHeight: sheetHeight,
+                    safeAreaBottomInset: safeAreaBottomInset,
+                    animation: animation,
+                    onLocationButtonTapped: handleLocationButtonTap
+                )
             }
-        .mapScope(mapScope)
         .onAppear {
             // Request location permission when view appears
             locationManager.requestWhenInUseAuthorization()
@@ -187,45 +177,23 @@ struct HikeMapView: View {
         }, action: { newValue in
             safeAreaBottomInset = newValue
         })
-    }
-    
-    @ViewBuilder
-    var floatingToolbar: some View {
-        Group {
-            VStack(spacing: 35) {
-                Button {
-                    // Car/Directions action
-                } label: {
-                    Image(systemName: "car.fill")
-                }
-                
-                Button {
-                    if locationManager.authorizationStatus == .notDetermined {
-                        locationManager.requestWhenInUseAuthorization()
-                    }
-                    withAnimation(.easeInOut(duration: 0.5)) {
-                        position = .userLocation(fallback: .automatic)
-                    }
-                } label: {
-                    Image(systemName: "location")
+        .onChange(of: position) { oldValue, newValue in
+            // If position changed and it wasn't a programmatic change, user dragged the map
+            if isTrackingUserLocation && !programmaticPositionChange {
+                isTrackingUserLocation = false
+            }
+            // Reset the flag after checking
+            if programmaticPositionChange {
+                DispatchQueue.main.async {
+                    programmaticPositionChange = false
                 }
             }
-            .font(.title3)
-            .foregroundStyle(Color.primary)
-            .padding(.vertical, 20)
-            .padding(.horizontal, 10)
-            .glassEffect(.regular, in: .capsule)
-            .opacity(toolbarOpacity)
-            .offset(y: -sheetHeight)
         }
-        .animation(animation, value: sheetHeight)
-        .animation(animation, value: toolbarOpacity)
-        .padding(.trailing, 15)
-        .offset(y: safeAreaBottomInset - 10)
     }
     
+    
     var maxAnimationDuration: CGFloat {
-        return 0.25
+        return DesignSystem.Animation.maxDuration
     }
     
     var animation: Animation {
@@ -233,8 +201,34 @@ struct HikeMapView: View {
     }
     
     
+    // MARK: - Location Button Handler
+    private func handleLocationButtonTap() {
+        if locationManager.authorizationStatus == .notDetermined {
+            locationManager.requestWhenInUseAuthorization()
+        }
+        
+        if isTrackingUserLocation {
+            // If already tracking, turn off tracking by going to automatic position
+            withAnimation(.easeInOut(duration: DesignSystem.Animation.slow)) {
+                position = .automatic
+                isTrackingUserLocation = false
+            }
+        } else {
+            // If not tracking, start tracking user location
+            programmaticPositionChange = true
+            withAnimation(.easeInOut(duration: DesignSystem.Animation.slow)) {
+                position = .userLocation(followsHeading: false, fallback: .automatic)
+                isTrackingUserLocation = true
+            }
+        }
+    }
+    
     var availableDetents: Set<PresentationDetent> {
-        return [.height(80), .height(350), .large]
+        return [
+            .height(DesignSystem.Sheet.collapsedHeight), 
+            .height(DesignSystem.Sheet.expandedHeight), 
+            .large
+        ]
     }
 }
 

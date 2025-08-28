@@ -132,7 +132,7 @@ struct HikeRowView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         
-                        Text("\(String(format: "%.1f", hike.distance)) mi")
+                        Text(hike.formattedDistance)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         
@@ -140,7 +140,7 @@ struct HikeRowView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         
-                        Text("\(Int(hike.elevationGain)) ft")
+                        Text(hike.formattedElevation)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

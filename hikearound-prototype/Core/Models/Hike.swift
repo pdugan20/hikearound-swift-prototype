@@ -18,6 +18,25 @@ struct Hike: Identifiable, Hashable {
     let distance: Double // in miles
     let elevationGain: Double // in feet
     let estimatedTime: TimeInterval // in seconds
+    
+    // MARK: - Computed Properties
+    var formattedTime: String {
+        let hours = Int(estimatedTime) / 3600
+        let minutes = Int(estimatedTime) % 3600 / 60
+        if hours > 0 {
+            return "\(hours)h \(minutes)m"
+        } else {
+            return "\(minutes)m"
+        }
+    }
+    
+    var formattedDistance: String {
+        return "\(String(format: "%.1f", distance)) mi"
+    }
+    
+    var formattedElevation: String {
+        return "\(Int(elevationGain)) ft"
+    }
     let imageURL: String?
     
     enum Difficulty: String, CaseIterable {

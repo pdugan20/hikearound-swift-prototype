@@ -12,16 +12,6 @@ struct HikeDetailSheet: View {
     let onDismiss: () -> Void
     @State private var showFullDetails = false
     
-    var formattedTime: String {
-        let hours = Int(hike.estimatedTime) / 3600
-        let minutes = Int(hike.estimatedTime) % 3600 / 60
-        if hours > 0 {
-            return "\(hours)h \(minutes)m"
-        } else {
-            return "\(minutes)m"
-        }
-    }
-    
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -38,7 +28,7 @@ struct HikeDetailSheet: View {
                                 .font(.subheadline)
                                 .foregroundStyle(hike.difficulty.color)
                             
-                            Label("\(String(format: "%.1f", hike.distance)) mi", systemImage: "map")
+                            Label(hike.formattedDistance, systemImage: "map")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
@@ -71,9 +61,9 @@ struct HikeDetailSheet: View {
                     
                     // Stats Grid
                     HStack(spacing: 20) {
-                        StatView(icon: "arrow.up.forward", title: "Elevation", value: "\(Int(hike.elevationGain)) ft")
-                        StatView(icon: "clock", title: "Duration", value: formattedTime)
-                        StatView(icon: "location", title: "Distance", value: "\(String(format: "%.1f", hike.distance)) mi")
+                        StatView(icon: "arrow.up.forward", title: "Elevation", value: hike.formattedElevation)
+                        StatView(icon: "clock", title: "Duration", value: hike.formattedTime)
+                        StatView(icon: "location", title: "Distance", value: hike.formattedDistance)
                     }
                     .padding(.horizontal)
                     
