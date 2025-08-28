@@ -1,6 +1,6 @@
 # Hikearound
 
-A modern iOS hiking app prototype built with SwiftUI and MapKit, featuring a beautiful glass-morphic UI design inspired by iOS 18's latest design language.
+A modern iOS hiking app prototype built with SwiftUI and MapKit, featuring a beautiful glass-morphic UI design with native Apple Maps integration and iOS 26's latest design language.
 
 ## Features
 
@@ -14,6 +14,7 @@ A modern iOS hiking app prototype built with SwiftUI and MapKit, featuring a bea
 ## Screenshots
 
 The app features:
+
 - Full-screen Apple Maps with hiking trail markers
 - Tap-to-reveal detail cards with hike information
 - Floating search bar with glass effect
@@ -24,59 +25,49 @@ The app features:
 - **SwiftUI** - Modern declarative UI framework
 - **MapKit** - Native Apple Maps integration
 - **CoreLocation** - Location services and tracking
-- **Swift 5.0** - Latest Swift language features
-- **iOS 18+** - Targeting latest iOS features
+- **Swift 6+** - Latest Swift language features
+- **iOS 26+** - Targeting latest iOS features
 
 ## Project Structure
 
 ```
 hikearound-prototype/
-├── App/
-│   └── Hikearound.swift           # Main app entry point
-├── Core/
-│   ├── Models/
-│   │   └── Hike.swift            # Hike data model
-│   ├── Services/
-│   │   └── LocationManager.swift # Location services manager
-│   └── Views/
-│       └── MainView.swift        # Main app view
-├── Features/
-│   ├── Map/
-│   │   ├── Views/
-│   │   │   └── HikeMapView.swift # Main map view
-│   │   └── Components/
-│   │       ├── HikeMarkerView.swift  # Custom map markers
-│   │       ├── HikeDetailSheet.swift # Hike detail overlay
-│   │       ├── HikeBottomSheetView.swift # Search and list view
-│   │       ├── MapFloatingToolbar.swift # Map controls
-│   │       └── StatView.swift       # Statistics display
-│   └── Search/
-│       └── SearchBarView.swift   # Search interface
-└── Assets.xcassets/              # App assets and icons
+├── App/                      # Main app entry point
+├── Core/                     # Core functionality
+│   ├── Models/               # Data models (Hike)
+│   ├── Services/             # Location services
+│   ├── Views/                # Main app view
+│   └── Constants/            # Design system constants
+├── Features/                 # Feature modules
+│   ├── Map/                  # Map and hiking components
+│   └── Search/               # Search functionality
+└── Assets.xcassets/          # App assets and icons
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Xcode 16.0 or later (Beta)
-- iOS 18.0+ deployment target
-- macOS 14.0 or later
+- Xcode 26.0 or later
+- iOS 26.0+ deployment target
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/[username]/hikearound-prototype.git
 ```
 
 2. Open in Xcode:
+
 ```bash
 cd hikearound-prototype
 open hikearound-prototype.xcodeproj
 ```
 
 3. Build and run:
+
 - Select your target device or simulator
 - Press `Cmd + R` to build and run
 
@@ -87,9 +78,6 @@ open hikearound-prototype.xcodeproj
 ```bash
 # Build for iOS Simulator
 xcodebuild -project hikearound-prototype.xcodeproj -scheme hikearound-prototype -destination 'platform=iOS Simulator,name=iPhone 16' build
-
-# Build for macOS
-xcodebuild -project hikearound-prototype.xcodeproj -scheme hikearound-prototype -destination 'platform=macOS' build
 ```
 
 ### Testing
@@ -102,18 +90,21 @@ xcodebuild test -project hikearound-prototype.xcodeproj -scheme hikearound-proto
 ## Features in Detail
 
 ### Map Integration
+
 - Full-screen MapKit view with 3D terrain
 - Custom hiking trail annotations
 - User location tracking
 - Map controls (compass, pitch toggle, location button)
 
 ### Hike Information
+
 - Trail difficulty levels (Easy, Moderate, Hard, Expert)
 - Distance and elevation gain statistics
 - Estimated hiking time
 - Detailed trail descriptions
 
 ### UI/UX Design
+
 - Glass-morphic design language throughout
 - Smooth spring animations
 - Gesture-driven interactions
@@ -122,6 +113,7 @@ xcodebuild test -project hikearound-prototype.xcodeproj -scheme hikearound-proto
 ## Sample Data
 
 The app includes 5 sample hikes around the San Francisco Bay Area:
+
 - Eagle Peak Trail (Moderate, 5.2 mi)
 - Redwood Loop (Easy, 2.8 mi)
 - Summit Ridge Trail (Expert, 12.5 mi)
@@ -135,7 +127,6 @@ The app includes 5 sample hikes around the San Francisco Bay Area:
 - [ ] Trail recording and tracking
 - [ ] Social features and trail reviews
 - [ ] Weather integration
-- [ ] Apple Watch companion app
 - [ ] Trail photos and galleries
 - [ ] Elevation profile charts
 
@@ -145,12 +136,8 @@ This is a prototype project for demonstration purposes. Feel free to fork and ex
 
 ## License
 
-MIT License - feel free to use this code for your own projects.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Author
 
 Created by Patrick Dugan on 8/28/25
-
----
-
-Built with SwiftUI and ❤️ for the hiking community
