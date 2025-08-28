@@ -42,7 +42,7 @@ struct HikeDetailCard: View {
                     HStack(spacing: 12) {
                         Label(hike.difficulty.rawValue, systemImage: "figure.hiking")
                             .font(.subheadline)
-                            .foregroundStyle(Color(hike.difficulty.color))
+                            .foregroundStyle(hike.difficulty.color)
                         
                         Label("\(String(format: "%.1f", hike.distance)) mi", systemImage: "map")
                             .font(.subheadline)

@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import SwiftUI
 
 struct Hike: Identifiable, Hashable {
     let id = UUID()
@@ -25,12 +26,12 @@ struct Hike: Identifiable, Hashable {
         case hard = "Hard"
         case expert = "Expert"
         
-        var color: String {
+        var color: Color {
             switch self {
-            case .easy: return "green"
-            case .moderate: return "blue"
-            case .hard: return "orange"
-            case .expert: return "red"
+            case .easy: return .green
+            case .moderate: return .blue
+            case .hard: return .orange
+            case .expert: return .red
             }
         }
     }
