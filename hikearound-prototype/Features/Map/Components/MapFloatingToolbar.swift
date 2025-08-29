@@ -38,7 +38,12 @@ struct MapFloatingToolbar: View {
         .padding(.horizontal, DesignSystem.Spacing.small)
         .glassEffect(.regular, in: .capsule)
         .opacity(toolbarOpacity)
-        .offset(y: -sheetHeight)
+        .offset(y: {
+            // Reduce spacing as sheet expands
+            let baseSpacing = DesignSystem.Spacing.small
+            let reducedSpacing = sheetHeight > 200 ? baseSpacing * 0.3 : baseSpacing
+            return -sheetHeight - reducedSpacing
+        }())
         .animation(animation, value: sheetHeight)
         .animation(animation, value: toolbarOpacity)
         .padding(.trailing, DesignSystem.Spacing.medium)
@@ -67,13 +72,9 @@ struct MapFloatingToolbar: View {
         case .denied, .restricted:
             return .red
         case .authorizedWhenInUse, .authorizedAlways:
-            if isTrackingUserLocation {
-                return .blue
-            } else {
-                return .primary
-            }
+            return .blue
         default:
-            return .primary
+            return .blue
         }
     }
 }

@@ -27,6 +27,7 @@ struct HikeMapView: View {
     @State private var safeAreaBottomInset: CGFloat = 0
     @State private var isTrackingUserLocation: Bool = false
     @State private var programmaticPositionChange: Bool = false
+    @State private var isSearchFocused: Bool = false
     
     // Sheet Content State
     enum SheetContent: Equatable {
@@ -97,6 +98,7 @@ struct HikeMapView: View {
                     HikeBottomSheetView(
                         sheetDetent: $sheetDetent,
                         searchText: $searchText,
+                        isSearchFocused: $isSearchFocused,
                         hikes: hikes,
                         onHikeSelected: { hike in
                             HikeSelectionAnimator.animateHikeSelection(
@@ -128,7 +130,9 @@ struct HikeMapView: View {
                                 }
                             }()
                         )
+                        .opacity(isSearchFocused ? 0 : 1)
                         .animation(.interpolatingSpring(duration: 0.4, bounce: 0.1), value: sheetContent)
+                        .animation(.easeInOut(duration: 0.2), value: isSearchFocused)
                     }
                     .zIndex(1)
                 }
@@ -141,7 +145,10 @@ struct HikeMapView: View {
                 } action: { oldValue, newValue in
                     sheetHeight = min(newValue, 400 + safeAreaBottomInset)
                     
-                    let progress = max(min((newValue - (400 + safeAreaBottomInset)) / 50, 1), 0)
+                    // Start fading when sheet goes above intermediate position (350)
+                    let fadeStartHeight = 350 + safeAreaBottomInset
+                    let fadeRange: CGFloat = 100 // Fade over 100 points of movement
+                    let progress = max(min((newValue - fadeStartHeight) / fadeRange, 1), 0)
                     toolbarOpacity = 1 - progress
                     
                     let diff = abs(newValue - oldValue)
@@ -187,6 +194,22 @@ struct HikeMapView: View {
                 DispatchQueue.main.async {
                     programmaticPositionChange = false
                 }
+            }
+        }
+        .onChange(of: sheetDetent) { oldValue, newValue in
+            // Immediately hide toolbar when sheet is fully expanded
+            withAnimation(.easeInOut(duration: 0.2)) {
+                if newValue == .large {
+                    toolbarOpacity = 0
+                } else if newValue == .height(350) {
+                    toolbarOpacity = 1
+                }
+            }
+        }
+        .onChange(of: isSearchFocused) { oldValue, newValue in
+            // Immediately hide toolbar when search is focused
+            withAnimation(.easeInOut(duration: 0.2)) {
+                toolbarOpacity = newValue ? 0 : 1
             }
         }
     }

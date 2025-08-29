@@ -10,6 +10,7 @@ import SwiftUI
 struct HikeBottomSheetView: View {
     @Binding var sheetDetent: PresentationDetent
     @Binding var searchText: String
+    @Binding var isSearchFocused: Bool
     @FocusState private var isFocused: Bool
     
     let hikes: [Hike]
@@ -60,34 +61,46 @@ struct HikeBottomSheetView: View {
                     }
                 } label: {
                     ZStack {
+                        Image("ProfilePhoto")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 44, height: 44)
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                            )
+                        
                         if isFocused {
-                            Group {
-                                Image(systemName: "xmark")
-                                    .frame(width: 48, height: 48)
-                                    .glassEffect(in: .circle)
-                            }
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(Color.primary)
-                            .transition(.blurReplace)
-                        } else {
-                            Text("H")
-                                .font(.title2.bold())
-                                .frame(width: 48, height: 48)
-                                .foregroundStyle(.white)
-                                .background(.blue, in: .circle)
-                                .transition(.blurReplace)
+                            // Cover the profile photo with background color
+                            Rectangle()
+                                .fill(Color(UIColor.systemBackground))
+                                .frame(width: 50, height: 50)
+                                .allowsHitTesting(false)
+                            
+                            // Show the X button with glass effect
+                            Image(systemName: "xmark")
+                                .frame(width: 44, height: 44)
+                                .glassEffect(in: .circle)
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.primary)
+                                .allowsHitTesting(false)
                         }
                     }
                 }
+                .buttonStyle(.plain)
             }
             .padding(.horizontal, 18)
-            .frame(height: 80)
-            .padding(.top, 5)
+            .padding(.vertical, 18)
         }
         .animation(.interpolatingSpring(duration: 0.3, bounce: 0, initialVelocity: 0), value: isFocused)
         .onChange(of: isFocused) { oldValue, newValue in
             sheetDetent = newValue ? .large : .height(350)
+            isSearchFocused = newValue
+        }
+        .onAppear {
+            isFocused = isSearchFocused
         }
     }
     
@@ -164,6 +177,7 @@ struct HikeRowView: View {
     HikeBottomSheetView(
         sheetDetent: .constant(.height(350)),
         searchText: .constant(""),
+        isSearchFocused: .constant(false),
         hikes: Hike.sampleHikes,
         onHikeSelected: { _ in }
     )
