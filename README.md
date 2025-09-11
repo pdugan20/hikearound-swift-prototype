@@ -127,12 +127,14 @@ pre-commit run --all-files
 ```
 
 Once installed, pre-commit will automatically:
+
 - Format Swift code with swift-format
 - Lint Swift code with SwiftLint
 - Check for trailing whitespace, large files, and merge conflicts
 - Validate YAML and JSON files
 
 To skip pre-commit hooks (not recommended):
+
 ```bash
 git commit --no-verify
 ```
@@ -180,14 +182,6 @@ The app includes 5 sample hikes around the San Francisco Bay Area:
 - [ ] Trail photos and galleries
 - [ ] Elevation profile charts
 
-## Contributing
-
-This is a prototype project for demonstration purposes. Feel free to fork and expand upon it!
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Author
-
-Created by Patrick Dugan on 8/28/25
