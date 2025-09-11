@@ -1,0 +1,63 @@
+# Pre-commit hooks configuration for Hikearound Prototype
+# See https://pre-commit.com for more information
+
+repos:
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: \.md$
+      - id: end-of-file-fixer
+        exclude: \.md$
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-added-large-files
+
+  # Swift formatting
+  - repo: local
+    hooks:
+      - id: swift-format
+        name: swift-format
+        entry: bash
+        args:
+          - -c
+          - /opt/homebrew/bin/swift-format -i -r hikearound-prototype/
+        language: system
+        files: \.swift$
+        pass_filenames: false
+        always_run: false
+
+  # Swift linting
+  - repo: local
+    hooks:
+      - id: swiftlint
+        name: SwiftLint
+        entry: bash
+        args:
+          - -c
+          - /opt/homebrew/bin/swiftlint lint hikearound-prototype/ --strict
+        language: system
+        files: \.swift$
+        pass_filenames: false
+        always_run: false
+
+  # Xcode project file checks
+  - repo: local
+    hooks:
+      - id: check-xcode-project
+        name: Check Xcode project files
+        entry: bash
+        args:
+          - -c
+          - |
+            if git diff --cached --name-only | grep -q "\.xcodeproj"; then
+              echo "Warning: Xcode project files have been modified."
+              echo "Please ensure these changes are intentional and necessary."
+            fi
+        language: system
+        files: \.xcodeproj/
+        pass_filenames: false
+        always_run: false

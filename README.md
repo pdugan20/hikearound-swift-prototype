@@ -78,6 +78,9 @@ open hikearound-prototype.xcodeproj
 ```bash
 # Build for iOS Simulator
 xcodebuild -project hikearound-prototype.xcodeproj -scheme hikearound-prototype -destination 'platform=iOS Simulator,name=iPhone 16' build
+
+# Build for macOS
+xcodebuild -project hikearound-prototype.xcodeproj -scheme hikearound-prototype -destination 'platform=macOS' build
 ```
 
 ### Testing
@@ -85,6 +88,53 @@ xcodebuild -project hikearound-prototype.xcodeproj -scheme hikearound-prototype 
 ```bash
 # Run unit tests
 xcodebuild test -project hikearound-prototype.xcodeproj -scheme hikearound-prototype -destination 'platform=iOS Simulator,name=iPhone 16'
+
+# Run UI tests
+xcodebuild test -project hikearound-prototype.xcodeproj -scheme hikearound-prototypeUITests -destination 'platform=iOS Simulator,name=iPhone 16'
+```
+
+### Code Quality
+
+This project uses SwiftLint and swift-format to maintain code quality:
+
+```bash
+# Lint Swift code
+swiftlint lint hikearound-prototype/
+
+# Format Swift code
+swift-format -i -r hikearound-prototype/
+
+# Run both tools together
+swift-format -i -r hikearound-prototype/ && swiftlint lint hikearound-prototype/
+```
+
+#### Pre-commit Hooks
+
+This project uses pre-commit hooks to automatically run code quality checks before commits:
+
+```bash
+# Install pre-commit (requires Python)
+pip install pre-commit
+
+# Or install via Homebrew
+brew install pre-commit
+
+# Install the git hook scripts
+pre-commit install
+
+# (Optional) Run against all files
+pre-commit run --all-files
+```
+
+Once installed, pre-commit will automatically:
+- Format Swift code with swift-format
+- Lint Swift code with SwiftLint
+- Check for trailing whitespace, large files, and merge conflicts
+- Validate YAML and JSON files
+
+To skip pre-commit hooks (not recommended):
+```bash
+git commit --no-verify
 ```
 
 ## Features in Detail

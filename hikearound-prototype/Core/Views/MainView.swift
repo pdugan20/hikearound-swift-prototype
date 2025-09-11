@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct MainView: View {
-    var body: some View {
-        HikeMapView()
-    }
+  var body: some View {
+    HikeMapView()
+  }
 }
 
 #Preview {
-    MainView()
+  MainView()
 }

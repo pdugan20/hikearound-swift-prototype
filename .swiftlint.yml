@@ -1,0 +1,66 @@
+# SwiftLint Configuration for Hikearound Prototype
+# This configuration customizes SwiftLint rules for the project's specific needs
+
+# Included paths (default is the current directory)
+included:
+  - hikearound-prototype
+
+# Excluded paths
+excluded:
+  - Pods
+  - build
+  - DerivedData
+
+# Rule configurations
+function_parameter_count:
+  warning: 8  # Allow up to 8 parameters (increased from default 5)
+  error: 10   # Error at 10 parameters
+
+nesting:
+  type_level:
+    warning: 3  # Allow up to 3 levels of type nesting (increased from default 1)
+    error: 4    # Error at 4 levels
+
+line_length:
+  warning: 120  # Keep current line length limit
+  error: 150
+
+# Opt-in rules (rules that are not enabled by default)
+opt_in_rules:
+  - function_default_parameter_at_end
+  - redundant_nil_coalescing
+  - single_test_class
+  - sorted_first_last
+  - switch_case_alignment
+  - unneeded_parentheses_in_closure_argument
+  - yoda_condition
+
+# Disabled rules (rules that are enabled by default but we want to disable)
+disabled_rules:
+  - todo  # Allow TODO comments
+  - force_cast  # Allow force casting when necessary
+  - force_try  # Allow force try when necessary
+  - trailing_comma  # Allow trailing commas for better diffs
+  - opening_brace  # swift-format handles brace spacing
+
+# Custom rule configurations
+trailing_whitespace:
+  ignores_empty_lines: false
+  ignores_comments: true
+
+cyclomatic_complexity:
+  warning: 10
+  error: 20
+
+file_length:
+  warning: 400
+  error: 500
+
+type_body_length:
+  warning: 250
+  error: 350
+
+# Analyzer rules (require full project compilation)
+analyzer_rules:
+  - explicit_self
+  - unused_import
